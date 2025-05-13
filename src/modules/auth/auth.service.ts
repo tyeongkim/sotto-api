@@ -6,6 +6,22 @@ import { AuthRepository } from './repositories/auth.repository';
 export class AuthService {
 	constructor(private readonly authRepository: AuthRepository) {}
 
+	async getSafeUserData(accountUUID: string) {
+		const account = await this.authRepository.getUser(accountUUID);
+		if (!account) {
+			throw new HttpException('Account not found', 404);
+		}
+		return {
+			uuid: account.uuid,
+			name: account.name,
+			username: account.username,
+			profileUrl: account.profileUrl,
+			publicKey: account.publicKey,
+			createdAt: account.createdAt,
+			updatedAt: account.updatedAt,
+		};
+	}
+
 	async validateToken(token: string) {
 		const account = await this.authRepository.getUserByToken(token);
 		if (!account) {

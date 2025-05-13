@@ -5,6 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import initSwagger from './config/swagger';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
@@ -20,6 +21,8 @@ async function bootstrap() {
 			forbidNonWhitelisted: true,
 		}),
 	);
+
+	await initSwagger(app);
 
 	await app.listen(3000, '0.0.0.0');
 

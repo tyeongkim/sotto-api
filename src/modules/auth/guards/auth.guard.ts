@@ -20,8 +20,8 @@ export class AuthGuard implements CanActivate {
 			throw new HttpException('Token not found', 401);
 		}
 
-		const account = await this.authService.validateToken(token);
-		request.account = account;
+		const user = await this.authService.validateToken(token);
+		request.user = user;
 
 		return true;
 	}
