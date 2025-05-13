@@ -10,13 +10,12 @@ datasource db {
 model User {
   uuid String @id @default(uuid())
 
-  username       String   @unique
-  name           String?
-  hashedPassword String
-  profileUrl     String?
-  publicKey      String   @unique
-  accessToken    String[] @default([])
-  bannedUsers    String[] @default([])
+  username    String   @unique
+  name        String?
+  profileUrl  String?
+  publicKey   String   @unique
+  accessToken String?  @unique
+  bannedUsers String[] @default([])
 
   ownedDiaries Diary[]
   sharedDiary  SharedDiary[]

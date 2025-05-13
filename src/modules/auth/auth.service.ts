@@ -7,7 +7,7 @@ export class AuthService {
 	constructor(private readonly authRepository: AuthRepository) {}
 
 	async validateToken(token: string) {
-		const account = await this.authRepository.getUserHasToken(token);
+		const account = await this.authRepository.getUserByToken(token);
 		if (!account) {
 			throw new HttpException('Invalid token', 401);
 		}
@@ -19,8 +19,8 @@ export class AuthService {
 		if (!account) {
 			throw new HttpException('Account not found', 404);
 		}
-		if (account.accessToken.length >= 5) {
-			throw new HttpException('Too many tokens', 400);
+		if (account.accessToken) {
+			throw new HttpException('Maximum token limit reached', 400);
 		}
 
 		const token = generateRandomString(64);

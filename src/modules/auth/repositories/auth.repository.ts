@@ -1,5 +1,6 @@
 import { PrismaService } from '@/common/modules/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { SignupDto } from '../dto/signup.dto';
 
 @Injectable()
 export class AuthRepository {
@@ -11,12 +12,19 @@ export class AuthRepository {
 		});
 	}
 
-	async getUserHasToken(token: string) {
-		return this.prisma.user.findFirst({
-			where: {
-				accessToken: {
-					has: token,
-				},
+	async getUserByToken(token: string) {
+		return this.prisma.user.findUnique({
+			where: { accessToken: token },
+		});
+	}
+
+	async createUser(payload: SignupDto) {
+		return this.prisma.user.create({
+			data: {
+				name: payload.name,
+				username: payload.username,
+				profileUrl: payload.profileUrl,
+				publicKey: payload.publicKey,
 			},
 		});
 	}
@@ -25,9 +33,7 @@ export class AuthRepository {
 		return this.prisma.user.update({
 			where: { uuid },
 			data: {
-				accessToken: {
-					push: token,
-				},
+				accessToken: token,
 			},
 		});
 	}
