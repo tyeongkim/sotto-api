@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uuid String @id @default(uuid())
+
+  username       String   @unique
+  name           String?
+  hashedPassword String
+  profileUrl     String?
+  publicKey      String   @unique
+  bannedUsers    String[] @default([])
+
+  ownedDiaries Diary[]
+  sharedDiary  SharedDiary[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([username])
+}
+
+model Diary {
+  id      String @id @default(uuid())
+  ownerId String
+
+  data  String
+  nonce String
+
+  owner      User          @relation(fields: [ownerId], references: [uuid])
+  sharedWith SharedDiary[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+}
+
+model SharedDiary {
+  id          String @id @default(uuid())
+  diaryId     String
+  recipientId String
+
+  encryptedKey String
+
+  diary     Diary @relation(fields: [diaryId], references: [id])
+  recipient User  @relation(fields: [recipientId], references: [uuid])
+
+  createdAt DateTime @default(now())
+
+  @@unique([diaryId, recipientId])
+  @@index([recipientId])
+}
