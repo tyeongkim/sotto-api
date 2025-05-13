@@ -33,7 +33,7 @@ model Diary {
   data  String
   nonce String
 
-  owner      User          @relation(fields: [ownerId], references: [uuid])
+  owner      User          @relation(fields: [ownerId], references: [uuid], onDelete: Cascade)
   sharedWith SharedDiary[]
 
   createdAt DateTime @default(now())
@@ -49,8 +49,8 @@ model SharedDiary {
 
   encryptedKey String
 
-  diary     Diary @relation(fields: [diaryId], references: [uuid])
-  recipient User  @relation(fields: [recipientId], references: [uuid])
+  diary     Diary @relation(fields: [diaryId], references: [uuid], onDelete: Cascade)
+  recipient User  @relation(fields: [recipientId], references: [uuid], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
