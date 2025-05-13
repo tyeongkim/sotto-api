@@ -17,8 +17,8 @@ model User {
   accessToken String?  @unique
   bannedUsers String[] @default([])
 
-  ownedDiaries Diary[]
-  sharedDiary  SharedDiary[]
+  ownedDiaries  Diary[]
+  sharedDiaries SharedDiary[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -27,7 +27,7 @@ model User {
 }
 
 model Diary {
-  id      String @id @default(uuid())
+  uuid    String @id @default(uuid())
   ownerId String
 
   data  String
@@ -43,13 +43,13 @@ model Diary {
 }
 
 model SharedDiary {
-  id          String @id @default(uuid())
+  uuid        String @id @default(uuid())
   diaryId     String
   recipientId String
 
   encryptedKey String
 
-  diary     Diary @relation(fields: [diaryId], references: [id])
+  diary     Diary @relation(fields: [diaryId], references: [uuid])
   recipient User  @relation(fields: [recipientId], references: [uuid])
 
   createdAt DateTime @default(now())
