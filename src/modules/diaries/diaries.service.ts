@@ -28,4 +28,9 @@ export class DiariesService {
 			),
 		);
 	}
+
+	async isDiaryOwner(diaryUUID: string, userUUID: string) {
+		const diary = await this.diariesRepository.getDiary(diaryUUID);
+		return diary?.owner.uuid === userUUID;
+	}
 }

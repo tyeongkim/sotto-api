@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 export class DiariesRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async getDiary(uuid: string) {
+	getDiary(uuid: string) {
 		return this.prisma.diary.findUnique({
 			where: { uuid },
 			include: {
@@ -19,7 +19,7 @@ export class DiariesRepository {
 		});
 	}
 
-	async createDiary(ownerUUID: string, data: string, nonce: string) {
+	createDiary(ownerUUID: string, data: string, nonce: string) {
 		return this.prisma.diary.create({
 			data: {
 				data,
@@ -68,5 +68,18 @@ export class DiariesRepository {
 			},
 		});
 		return result;
+	}
+
+	deleteSharedDiary(diaryUUID: string, recipientUUID: string) {
+		return this.prisma.sharedDiary.deleteMany({
+			where: {
+				diary: {
+					uuid: diaryUUID,
+				},
+				recipient: {
+					uuid: recipientUUID,
+				},
+			},
+		});
 	}
 }

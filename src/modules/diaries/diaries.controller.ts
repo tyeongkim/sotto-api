@@ -2,7 +2,9 @@ import { AuthorizedRequest } from '@/types/request';
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
+	HttpException,
 	Param,
 	Patch,
 	Post,
@@ -41,9 +43,25 @@ export class DiariesController {
 
 	@Patch('shared/:uuid/users')
 	async addUserToSharedDiary(
+		@Req() req: AuthorizedRequest,
 		@Body() body: AddUsersToSharedDiaryDto,
 		@Param('uuid') diaryUUID: string,
 	) {
-		return this.diariesService.addUsersToSharedDiary(diaryUUID, body.targets);
+		if (await this.diariesService.isDiaryOwner(diaryUUID, req.user.uuid)) {
+			return this.diariesService.addUsersToSharedDiary(diaryUUID, body.targets);
+		}
+		throw new HttpException('You are not the owner of this diary', 403);
+	}
+
+	@Delete('shared/:diaryUUID/users/:userUUID')
+	async removeUserFromSharedDiary(
+		@Req() req: AuthorizedRequest,
+		@Param('diaryUUID') diaryUUID: string,
+		@Param('userUUID') userUUID: string,
+	) {
+		if (await this.diariesService.isDiaryOwner(diaryUUID, req.user.uuid)) {
+			return this.diariesRepository.deleteSharedDiary(diaryUUID, userUUID);
+		}
+		throw new HttpException('You are not the owner of this diary', 403);
 	}
 }
