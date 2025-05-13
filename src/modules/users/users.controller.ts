@@ -9,13 +9,13 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { BanUserDto } from './dto/ban-user.dto';
 import { SignupDto } from './dto/signup.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { UsersRepository } from './repositories/users.repository';
 import { UsersService } from './users.service';
 
 @Controller('users')
-@ApiBearerAuth()
 export class UsersController {
 	constructor(
 		private readonly authRepository: UsersRepository,
@@ -24,11 +24,14 @@ export class UsersController {
 
 	@Get('me')
 	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async getMe(@Req() req: AuthorizedRequest) {
 		return req.user;
 	}
 
 	@Get(':uuid')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	@ApiParam({
 		name: 'uuid',
 		description: 'UUID of the user',
@@ -41,5 +44,12 @@ export class UsersController {
 	@Post('')
 	async signUp(@Body() body: SignupDto) {
 		return await this.authRepository.createUser(body);
+	}
+
+	@Post('ban')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
+	async banUser(@Req() req: AuthorizedRequest, @Body() body: BanUserDto) {
+		return await this.authRepository.addBan(req.user.uuid, body.uuid);
 	}
 }

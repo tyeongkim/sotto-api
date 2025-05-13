@@ -37,4 +37,13 @@ export class UsersRepository {
 			},
 		});
 	}
+
+	async addBan(userUUID: string, targetUUID: string) {
+		return this.prisma.user.update({
+			where: { uuid: userUUID },
+			data: {
+				bannedUsers: { push: targetUUID },
+			},
+		});
+	}
 }
