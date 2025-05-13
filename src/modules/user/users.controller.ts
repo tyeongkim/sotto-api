@@ -9,17 +9,17 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
 import { SignupDto } from './dto/signup.dto';
 import { AuthGuard } from './guards/auth.guard';
-import { AuthRepository } from './repositories/auth.repository';
+import { UsersRepository } from './repositories/users.repository';
+import { UsersService } from './users.service';
 
-@Controller('auth')
+@Controller('users')
 @ApiBearerAuth()
-export class AuthController {
+export class UsersController {
 	constructor(
-		private readonly authRepository: AuthRepository,
-		private readonly authService: AuthService,
+		private readonly authRepository: UsersRepository,
+		private readonly authService: UsersService,
 	) {}
 
 	@Get('me')
@@ -38,7 +38,7 @@ export class AuthController {
 		return await this.authService.getSafeUserData(uuid);
 	}
 
-	@Post('signup')
+	@Post('')
 	async signUp(@Body() body: SignupDto) {
 		return await this.authRepository.createUser(body);
 	}

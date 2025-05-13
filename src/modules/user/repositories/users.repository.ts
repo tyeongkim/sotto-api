@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { SignupDto } from '../dto/signup.dto';
 
 @Injectable()
-export class AuthRepository {
+export class UsersRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async getUser(uuid: string) {

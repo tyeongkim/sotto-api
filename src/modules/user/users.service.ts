@@ -1,10 +1,10 @@
 import { generateRandomString } from '@/common/utils/common.util';
 import { HttpException, Injectable } from '@nestjs/common';
-import { AuthRepository } from './repositories/auth.repository';
+import { UsersRepository } from './repositories/users.repository';
 
 @Injectable()
-export class AuthService {
-	constructor(private readonly authRepository: AuthRepository) {}
+export class UsersService {
+	constructor(private readonly authRepository: UsersRepository) {}
 
 	async getSafeUserData(accountUUID: string) {
 		const account = await this.authRepository.getUser(accountUUID);

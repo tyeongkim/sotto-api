@@ -5,11 +5,11 @@ import {
 	HttpException,
 	Injectable,
 } from '@nestjs/common';
-import { AuthService } from '../auth.service';
+import { UsersService } from '../users.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-	constructor(private readonly authService: AuthService) {}
+	constructor(private readonly authService: UsersService) {}
 
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest<AuthorizedRequest>();
