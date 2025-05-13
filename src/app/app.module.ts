@@ -1,4 +1,4 @@
-import { UsersModule } from '@/modules/user/users.module';
+import { UsersModule } from '@/modules/users/users.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
