@@ -14,13 +14,13 @@ export class SignupDto {
 	name: string;
 
 	@IsString()
-	@Matches(/^[a-zA-Z0-9]{6,12}$/, {
+	@Matches(/^[a-zA-Z0-9.]{6,12}$/, {
 		message:
-			'username must be 6-12 characters long and contain only letters and numbers',
+			'username must be 6-12 characters long and contain only letters, numbers, and dots',
 	})
 	@ApiProperty({
 		description: 'Username of the user',
-		example: 'johndoe123',
+		example: 'john.doe123',
 	})
 	username: string;
 
