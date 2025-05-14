@@ -43,7 +43,12 @@ export class UsersController {
 
 	@Post('')
 	async signUp(@Body() body: SignupDto) {
-		return await this.authRepository.createUser(body);
+		const newUser = await this.authRepository.createUser(body);
+		const accessToken = await this.authService.generateToken(newUser.uuid);
+		return {
+			accessToken,
+			user: newUser,
+		};
 	}
 
 	@Post('ban')
