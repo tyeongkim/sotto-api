@@ -3,8 +3,10 @@ import {
 	Body,
 	Controller,
 	Get,
+	HttpException,
 	Param,
 	Post,
+	Query,
 	Req,
 	UseGuards,
 } from '@nestjs/common';
@@ -22,11 +24,14 @@ export class UsersController {
 		private readonly authService: UsersService,
 	) {}
 
-	@Get('me')
+	@Get('')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth()
-	async getMe(@Req() req: AuthorizedRequest) {
-		return req.user;
+	async getUsers(@Query('username') username: string) {
+		if (!username) {
+			throw new HttpException('Username is required', 400);
+		}
+		return this.authRepository.searchUsersByUsername(username);
 	}
 
 	@Get(':uuid')
@@ -39,6 +44,13 @@ export class UsersController {
 	})
 	async getUser(@Param('uuid') uuid: string) {
 		return await this.authService.getSafeUserData(uuid);
+	}
+
+	@Get('me')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
+	async getMe(@Req() req: AuthorizedRequest) {
+		return req.user;
 	}
 
 	@Post('')

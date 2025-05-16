@@ -18,6 +18,18 @@ export class UsersRepository {
 		});
 	}
 
+	async searchUsersByUsername(username: string) {
+		return this.prisma.user.findMany({
+			where: {
+				username: {
+					contains: username,
+					mode: 'insensitive',
+				},
+			},
+			take: 10,
+		});
+	}
+
 	async createUser(payload: SignupDto) {
 		return this.prisma.user.create({
 			data: {
