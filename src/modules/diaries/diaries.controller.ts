@@ -29,11 +29,21 @@ export class DiariesController {
 
 	@Post('')
 	async shareDiary(@Req() req: AuthorizedRequest, @Body() body: ShareDiaryDto) {
-		return this.diariesService.createDiary(
+		const data = await this.diariesService.createDiary(
 			req.user.uuid,
 			body.data,
 			body.nonce,
 		);
+		await this.diariesService.addUsersToSharedDiary(data.uuid, body.targets);
+		return data;
+	}
+
+	@Delete(':uuid')
+	async deleteDiary(
+		@Param('uuid') uuid: string,
+		@Req() req: AuthorizedRequest,
+	) {
+		return this.diariesService.deleteDiary(uuid, req.user.uuid);
 	}
 
 	@Get('shared')

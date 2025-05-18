@@ -31,6 +31,12 @@ export class DiariesRepository {
 		});
 	}
 
+	deleteDiary(uuid: string) {
+		return this.prisma.diary.delete({
+			where: { uuid },
+		});
+	}
+
 	async getSharedDiaries(userUUID: string) {
 		const user = await this.prisma.user.findUnique({
 			where: { uuid: userUUID },
