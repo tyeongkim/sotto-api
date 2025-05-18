@@ -27,11 +27,14 @@ export class UsersController {
 	@Get('')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth()
-	async getUsers(@Query('username') username: string) {
+	async getUsers(
+		@Query('username') username: string,
+		@Req() req: AuthorizedRequest,
+	) {
 		if (!username) {
 			throw new HttpException('Username is required', 400);
 		}
-		return this.authRepository.searchUsersByUsername(username);
+		return this.authRepository.searchUsersByUsername(username, req.user.uuid);
 	}
 
 	@Get(':uuid')

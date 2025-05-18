@@ -18,12 +18,15 @@ export class UsersRepository {
 		});
 	}
 
-	async searchUsersByUsername(username: string) {
+	async searchUsersByUsername(username: string, excludeUUID?: string) {
 		return this.prisma.user.findMany({
 			where: {
 				username: {
 					contains: username,
 					mode: 'insensitive',
+				},
+				NOT: {
+					uuid: excludeUUID,
 				},
 			},
 			take: 10,
