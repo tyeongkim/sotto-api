@@ -2,6 +2,7 @@ import { AuthorizedRequest } from '@/types/request';
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	HttpException,
 	Param,
@@ -37,6 +38,16 @@ export class UsersController {
 		return this.authRepository.searchUsersByUsername(username, req.user.uuid);
 	}
 
+	@Post('')
+	async signUp(@Body() body: SignupDto) {
+		const newUser = await this.authRepository.createUser(body);
+		const accessToken = await this.authService.generateToken(newUser.uuid);
+		return {
+			accessToken,
+			user: newUser,
+		};
+	}
+
 	@Get(':uuid')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth()
@@ -56,14 +67,11 @@ export class UsersController {
 		return req.user;
 	}
 
-	@Post('')
-	async signUp(@Body() body: SignupDto) {
-		const newUser = await this.authRepository.createUser(body);
-		const accessToken = await this.authService.generateToken(newUser.uuid);
-		return {
-			accessToken,
-			user: newUser,
-		};
+	@Delete('me')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
+	async deleteMe(@Req() req: AuthorizedRequest) {
+		return await this.authRepository.deleteUser(req.user.uuid);
 	}
 
 	@Post('ban')

@@ -44,6 +44,12 @@ export class UsersRepository {
 		});
 	}
 
+	async deleteUser(uuid: string) {
+		return this.prisma.user.delete({
+			where: { uuid },
+		});
+	}
+
 	async addAccessToken(uuid: string, token: string) {
 		return this.prisma.user.update({
 			where: { uuid },
