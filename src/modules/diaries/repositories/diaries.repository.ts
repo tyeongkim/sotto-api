@@ -73,7 +73,11 @@ export class DiariesRepository {
 				},
 			},
 		});
-		return user?.sharedDiaries || [];
+		return (
+			user?.sharedDiaries?.filter(
+				(sharedDiary) => !user.bannedUsers.includes(sharedDiary.diary.ownerId),
+			) || []
+		);
 	}
 
 	createSharedDiary(
