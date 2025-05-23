@@ -8,6 +8,7 @@ import {
 	Param,
 	Patch,
 	Post,
+	Put,
 	Req,
 	UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { AuthGuard } from '../users/guards/auth.guard';
 import { DiariesService } from './diaries.service';
 import { AddUsersToSharedDiaryDto } from './dto/add-users.dto';
 import { ShareDiaryDto } from './dto/share-diary.dto';
+import { UpdateDiaryDto } from './dto/update-diary.dto';
 import { DiariesRepository } from './repositories/diaries.repository';
 
 @Controller('diaries')
@@ -36,6 +38,18 @@ export class DiariesController {
 		);
 		await this.diariesService.addUsersToSharedDiary(data.uuid, body.targets);
 		return data;
+	}
+
+	@Put(':uuid')
+	async updateDiary(
+		@Req() req: AuthorizedRequest,
+		@Param('uuid') uuid: string,
+		@Body() body: UpdateDiaryDto,
+	) {
+		if (await this.diariesService.isDiaryOwner(uuid, req.user.uuid)) {
+			return this.diariesService.updateDiary(uuid, body.data, body.nonce);
+		}
+		throw new HttpException('You are not the owner of this diary', 403);
 	}
 
 	@Delete(':uuid')

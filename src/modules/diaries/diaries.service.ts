@@ -14,6 +14,10 @@ export class DiariesService {
 		return this.diariesRepository.createDiary(ownerUUID, data, nonce);
 	}
 
+	async updateDiary(uuid: string, data: string, nonce: string) {
+		return this.diariesRepository.updateDiary(uuid, data, nonce);
+	}
+
 	async deleteDiary(uuid: string, userUUID: string) {
 		if (await this.isDiaryOwner(uuid, userUUID)) {
 			return this.diariesRepository.deleteDiary(uuid);

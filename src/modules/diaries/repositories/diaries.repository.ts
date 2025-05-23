@@ -31,6 +31,16 @@ export class DiariesRepository {
 		});
 	}
 
+	updateDiary(uuid: string, data: string, nonce: string) {
+		return this.prisma.diary.update({
+			where: { uuid },
+			data: {
+				data,
+				nonce,
+			},
+		});
+	}
+
 	deleteDiary(uuid: string) {
 		return this.prisma.diary.delete({
 			where: { uuid },
