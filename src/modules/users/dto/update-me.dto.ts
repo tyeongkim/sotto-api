@@ -1,7 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, Length, Matches } from 'class-validator';
 
-export class SignupDto {
+export class UpdateMeDto {
+	@IsOptional()
 	@IsString()
 	@Length(1, 50, { message: 'name must be between 1 and 50 characters long' })
 	@Matches(/^[a-zA-Z\s]+$/, {
@@ -10,21 +11,9 @@ export class SignupDto {
 	@ApiProperty({
 		description: 'Name of the user',
 		example: 'John Doe',
+		required: false,
 	})
-	name: string;
-
-	@IsString()
-	@Length(6, 12, {
-		message: 'username must be between 6 and 12 characters long',
-	})
-	@Matches(/^[a-zA-Z0-9.]$/, {
-		message: 'username must contain only letters, numbers, and dots',
-	})
-	@ApiProperty({
-		description: 'Username of the user',
-		example: 'john.doe123',
-	})
-	username: string;
+	name?: string;
 
 	@IsString()
 	@IsOptional()
@@ -32,10 +21,4 @@ export class SignupDto {
 		description: 'Profile URL of the user',
 	})
 	profileUrl?: string;
-
-	@IsString()
-	@ApiProperty({
-		description: 'Public key of the user',
-	})
-	publicKey: string;
 }

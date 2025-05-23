@@ -6,6 +6,7 @@ import {
 	Get,
 	HttpException,
 	Param,
+	Patch,
 	Post,
 	Query,
 	Req,
@@ -14,6 +15,7 @@ import {
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { BanUserDto } from './dto/ban-user.dto';
 import { SignupDto } from './dto/signup.dto';
+import { UpdateMeDto } from './dto/update-me.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { UsersRepository } from './repositories/users.repository';
 import { UsersService } from './users.service';
@@ -65,6 +67,13 @@ export class UsersController {
 	@ApiBearerAuth()
 	async getMe(@Req() req: AuthorizedRequest) {
 		return req.user;
+	}
+
+	@Patch('me')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
+	async updateMe(@Req() req: AuthorizedRequest, @Body() body: UpdateMeDto) {
+		return await this.authRepository.updateUser(req.user.uuid, body);
 	}
 
 	@Delete('me')

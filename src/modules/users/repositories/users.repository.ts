@@ -44,6 +44,13 @@ export class UsersRepository {
 		});
 	}
 
+	async updateUser(uuid: string, payload: Partial<SignupDto>) {
+		return this.prisma.user.update({
+			where: { uuid },
+			data: payload,
+		});
+	}
+
 	async deleteUser(uuid: string) {
 		return this.prisma.user.delete({
 			where: { uuid },
