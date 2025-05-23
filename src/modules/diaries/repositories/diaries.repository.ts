@@ -43,7 +43,16 @@ export class DiariesRepository {
 			include: {
 				sharedDiaries: {
 					include: {
-						diary: true,
+						diary: {
+							include: {
+								owner: {
+									omit: {
+										accessToken: true,
+										bannedUsers: true,
+									},
+								},
+							},
+						},
 						recipient: {
 							omit: {
 								accessToken: true,
