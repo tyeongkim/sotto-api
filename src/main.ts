@@ -8,7 +8,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import initSwagger from './config/swagger';
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule, { cors: true });
 	const configService = app.get(ConfigService);
 	const logger = new Logger('bootstrap');
 
@@ -21,6 +21,7 @@ async function bootstrap() {
 			forbidNonWhitelisted: true,
 		}),
 	);
+	app.getHttpAdapter().getInstance().disable('x-powered-by');
 
 	await initSwagger(app);
 
