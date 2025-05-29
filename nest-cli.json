@@ -4,6 +4,7 @@
 	"sourceRoot": "src",
 	"compilerOptions": {
 		"deleteOutDir": true,
-		"plugins": []
+		"plugins": [],
+		"tsConfigPath": "tsconfig.build.json"
 	}
 }

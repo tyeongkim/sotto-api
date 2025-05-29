@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"prebuild": "rimraf dist && bun lint",
-		"build": "nest build",
+		"build": "nest build && tsc-alias",
 		"dev": "nest start --watch",
 		"start": "node dist/src/main.js",
 		"prisma": "prisma",
@@ -50,6 +50,7 @@
 		"commitizen": "^4.3.1",
 		"cz-conventional-changelog": "^3.3.0",
 		"rimraf": "^6.0.1",
-		"swagger-themes": "^1.4.3"
+		"swagger-themes": "^1.4.3",
+		"tsc-alias": "^1.8.16"
 	}
 }
