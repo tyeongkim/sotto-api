@@ -5,7 +5,7 @@
 		"prebuild": "rimraf dist && bun lint",
 		"build": "nest build",
 		"dev": "nest start --watch",
-		"start": "node dist/main.js",
+		"start": "node dist/src/main.js",
 		"prisma": "prisma",
 		"commit": "bun lint && git add . && cz",
 		"lint": "biome check --fix",
