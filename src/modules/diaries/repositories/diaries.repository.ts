@@ -19,6 +19,27 @@ export class DiariesRepository {
 		});
 	}
 
+	getDiaryWithLimitedData(uuid: string) {
+		return this.prisma.diary.findUnique({
+			where: { uuid },
+			select: {
+				uuid: true,
+				data: true,
+				nonce: true,
+				createdAt: true,
+				updatedAt: true,
+				owner: {
+					select: {
+						uuid: true,
+						username: true,
+						name: true,
+						profileUrl: true,
+					},
+				},
+			},
+		});
+	}
+
 	createDiary(ownerUUID: string, data: string, nonce: string) {
 		return this.prisma.diary.create({
 			data: {

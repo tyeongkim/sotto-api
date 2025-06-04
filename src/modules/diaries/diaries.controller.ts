@@ -12,7 +12,7 @@ import {
 	Req,
 	UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { AuthGuard } from '../users/guards/auth.guard';
 import { DiariesService } from './diaries.service';
 import { AddUsersToSharedDiaryDto } from './dto/add-users.dto';
@@ -21,8 +21,6 @@ import { UpdateDiaryDto } from './dto/update-diary.dto';
 import { DiariesRepository } from './repositories/diaries.repository';
 
 @Controller('diaries')
-@UseGuards(AuthGuard)
-@ApiBearerAuth()
 export class DiariesController {
 	constructor(
 		private readonly diariesService: DiariesService,
@@ -30,6 +28,8 @@ export class DiariesController {
 	) {}
 
 	@Post('')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async shareDiary(@Req() req: AuthorizedRequest, @Body() body: ShareDiaryDto) {
 		const data = await this.diariesService.createDiary(
 			req.user.uuid,
@@ -40,7 +40,19 @@ export class DiariesController {
 		return data;
 	}
 
+	@Get(':uuid')
+	@ApiParam({
+		name: 'uuid',
+		description: 'UUID of the diary',
+		type: String,
+	})
+	async getDiary(@Param('uuid') uuid: string) {
+		return this.diariesRepository.getDiaryWithLimitedData(uuid);
+	}
+
 	@Put(':uuid')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async updateDiary(
 		@Req() req: AuthorizedRequest,
 		@Param('uuid') uuid: string,
@@ -53,6 +65,8 @@ export class DiariesController {
 	}
 
 	@Delete(':uuid')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async deleteDiary(
 		@Param('uuid') uuid: string,
 		@Req() req: AuthorizedRequest,
@@ -61,11 +75,15 @@ export class DiariesController {
 	}
 
 	@Get('shared')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async getSharedDiaries(@Req() req: AuthorizedRequest) {
 		return this.diariesRepository.getSharedDiaries(req.user.uuid);
 	}
 
 	@Patch('shared/:uuid/users')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async addUserToSharedDiary(
 		@Req() req: AuthorizedRequest,
 		@Body() body: AddUsersToSharedDiaryDto,
@@ -78,6 +96,8 @@ export class DiariesController {
 	}
 
 	@Delete('shared/:diaryUUID/users/:userUUID')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
 	async removeUserFromSharedDiary(
 		@Req() req: AuthorizedRequest,
 		@Param('diaryUUID') diaryUUID: string,
