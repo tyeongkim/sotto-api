@@ -5,6 +5,7 @@ import {
 	HttpException,
 	Injectable,
 } from '@nestjs/common';
+import { TOKEN_NOT_GENERATED } from '../constants';
 import { UsersService } from '../users.service';
 
 @Injectable()
@@ -16,7 +17,7 @@ export class AuthGuard implements CanActivate {
 		const header = request.headers.authorization || '';
 		const token = header?.split(' ')[1];
 
-		if (!token) {
+		if (!token || token === TOKEN_NOT_GENERATED) {
 			throw new HttpException('Token not found', 401);
 		}
 

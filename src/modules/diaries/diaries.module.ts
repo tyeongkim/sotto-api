@@ -9,5 +9,6 @@ import { DiariesRepository } from './repositories/diaries.repository';
 	imports: [UsersModule, PrismaModule],
 	controllers: [DiariesController],
 	providers: [DiariesService, DiariesRepository],
+	exports: [DiariesService, DiariesRepository],
 })
 export class DiariesModule {}

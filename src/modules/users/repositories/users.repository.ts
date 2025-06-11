@@ -1,5 +1,6 @@
 import { PrismaService } from '@/common/modules/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { TOKEN_NOT_GENERATED } from '../constants';
 import { SignupDto } from '../dto/signup.dto';
 
 @Injectable()
@@ -40,6 +41,7 @@ export class UsersRepository {
 				username: payload.username,
 				profileUrl: payload.profileUrl,
 				publicKey: payload.publicKey,
+				accessToken: TOKEN_NOT_GENERATED,
 			},
 		});
 	}

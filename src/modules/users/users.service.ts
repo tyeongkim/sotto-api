@@ -1,5 +1,6 @@
 import { generateRandomString } from '@/common/utils/common.util';
 import { HttpException, Injectable } from '@nestjs/common';
+import { TOKEN_NOT_GENERATED } from './constants';
 import { UsersRepository } from './repositories/users.repository';
 
 @Injectable()
@@ -35,7 +36,7 @@ export class UsersService {
 		if (!account) {
 			throw new HttpException('Account not found', 404);
 		}
-		if (account.accessToken) {
+		if (account.accessToken || account.accessToken !== TOKEN_NOT_GENERATED) {
 			throw new HttpException('Maximum token limit reached', 400);
 		}
 

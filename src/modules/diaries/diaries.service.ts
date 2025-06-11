@@ -40,8 +40,16 @@ export class DiariesService {
 		);
 	}
 
-	async isDiaryOwner(diaryUUID: string, userUUID: string) {
+	async isDiaryOwner(userUUID: string, diaryUUID: string) {
 		const diary = await this.diariesRepository.getDiary(diaryUUID);
 		return diary?.owner.uuid === userUUID;
+	}
+
+	async isUserInSharedDiary(userUUID: string, diaryUUID: string) {
+		const sharedDiary = await this.diariesRepository.getSharedDiary(
+			diaryUUID,
+			userUUID,
+		);
+		return !!sharedDiary;
 	}
 }

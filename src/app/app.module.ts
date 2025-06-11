@@ -1,4 +1,5 @@
 import { DiariesModule } from '@/modules/diaries/diaries.module';
+import { RepliesModule } from '@/modules/replies/replies.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -11,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 		}),
 		UsersModule,
 		DiariesModule,
+		RepliesModule,
 	],
 	controllers: [],
 	providers: [],

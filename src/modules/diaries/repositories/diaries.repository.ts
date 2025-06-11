@@ -101,6 +101,37 @@ export class DiariesRepository {
 		);
 	}
 
+	getSharedDiary(userUUID: string, diaryUUID: string) {
+		return this.prisma.sharedDiary.findFirst({
+			where: {
+				diary: {
+					uuid: diaryUUID,
+				},
+				recipient: {
+					uuid: userUUID,
+				},
+			},
+			include: {
+				diary: {
+					include: {
+						owner: {
+							omit: {
+								accessToken: true,
+								bannedUsers: true,
+							},
+						},
+					},
+				},
+				recipient: {
+					omit: {
+						accessToken: true,
+						bannedUsers: true,
+					},
+				},
+			},
+		});
+	}
+
 	createSharedDiary(
 		diaryUUID: string,
 		recipientUUID: string,

@@ -55,7 +55,7 @@ export class DiariesController {
 		@Body() body: AddUsersToSharedDiaryDto,
 		@Param('uuid') diaryUUID: string,
 	) {
-		if (await this.diariesService.isDiaryOwner(diaryUUID, req.user.uuid)) {
+		if (await this.diariesService.isDiaryOwner(req.user.uuid, diaryUUID)) {
 			return this.diariesService.addUsersToSharedDiary(diaryUUID, body.targets);
 		}
 		throw new HttpException('You are not the owner of this diary', 403);
@@ -69,7 +69,7 @@ export class DiariesController {
 		@Param('diaryUUID') diaryUUID: string,
 		@Param('userUUID') userUUID: string,
 	) {
-		if (await this.diariesService.isDiaryOwner(diaryUUID, req.user.uuid)) {
+		if (await this.diariesService.isDiaryOwner(req.user.uuid, diaryUUID)) {
 			return this.diariesRepository.deleteSharedDiary(diaryUUID, userUUID);
 		}
 		throw new HttpException('You are not the owner of this diary', 403);
@@ -93,7 +93,7 @@ export class DiariesController {
 		@Param('uuid') uuid: string,
 		@Body() body: UpdateDiaryDto,
 	) {
-		if (await this.diariesService.isDiaryOwner(uuid, req.user.uuid)) {
+		if (await this.diariesService.isDiaryOwner(req.user.uuid, uuid)) {
 			return this.diariesService.updateDiary(uuid, body.data, body.nonce);
 		}
 		throw new HttpException('You are not the owner of this diary', 403);
