@@ -40,40 +40,6 @@ export class DiariesController {
 		return data;
 	}
 
-	@Get(':uuid')
-	@ApiParam({
-		name: 'uuid',
-		description: 'UUID of the diary',
-		type: String,
-	})
-	async getDiary(@Param('uuid') uuid: string) {
-		return this.diariesRepository.getDiaryWithLimitedData(uuid);
-	}
-
-	@Put(':uuid')
-	@UseGuards(AuthGuard)
-	@ApiBearerAuth()
-	async updateDiary(
-		@Req() req: AuthorizedRequest,
-		@Param('uuid') uuid: string,
-		@Body() body: UpdateDiaryDto,
-	) {
-		if (await this.diariesService.isDiaryOwner(uuid, req.user.uuid)) {
-			return this.diariesService.updateDiary(uuid, body.data, body.nonce);
-		}
-		throw new HttpException('You are not the owner of this diary', 403);
-	}
-
-	@Delete(':uuid')
-	@UseGuards(AuthGuard)
-	@ApiBearerAuth()
-	async deleteDiary(
-		@Param('uuid') uuid: string,
-		@Req() req: AuthorizedRequest,
-	) {
-		return this.diariesService.deleteDiary(uuid, req.user.uuid);
-	}
-
 	@Get('shared')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth()
@@ -107,5 +73,39 @@ export class DiariesController {
 			return this.diariesRepository.deleteSharedDiary(diaryUUID, userUUID);
 		}
 		throw new HttpException('You are not the owner of this diary', 403);
+	}
+
+	@Get(':uuid')
+	@ApiParam({
+		name: 'uuid',
+		description: 'UUID of the diary',
+		type: String,
+	})
+	async getDiary(@Param('uuid') uuid: string) {
+		return this.diariesRepository.getDiaryWithLimitedData(uuid);
+	}
+
+	@Put(':uuid')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
+	async updateDiary(
+		@Req() req: AuthorizedRequest,
+		@Param('uuid') uuid: string,
+		@Body() body: UpdateDiaryDto,
+	) {
+		if (await this.diariesService.isDiaryOwner(uuid, req.user.uuid)) {
+			return this.diariesService.updateDiary(uuid, body.data, body.nonce);
+		}
+		throw new HttpException('You are not the owner of this diary', 403);
+	}
+
+	@Delete(':uuid')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth()
+	async deleteDiary(
+		@Param('uuid') uuid: string,
+		@Req() req: AuthorizedRequest,
+	) {
+		return this.diariesService.deleteDiary(uuid, req.user.uuid);
 	}
 }
