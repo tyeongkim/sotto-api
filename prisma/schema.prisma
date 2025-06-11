@@ -14,11 +14,12 @@ model User {
   name        String?
   profileUrl  String?
   publicKey   String   @unique
-  accessToken String?  @unique
+  accessToken String   @unique
   bannedUsers String[] @default([])
 
   ownedDiaries  Diary[]
   sharedDiaries SharedDiary[]
+  sentReplies   Reply[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,6 +36,7 @@ model Diary {
 
   owner      User          @relation(fields: [ownerId], references: [uuid], onDelete: Cascade)
   sharedWith SharedDiary[]
+  replies    Reply[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,4 +58,20 @@ model SharedDiary {
 
   @@unique([diaryId, recipientId])
   @@index([recipientId])
+}
+
+model Reply {
+  uuid     String @id @default(uuid())
+  diaryId  String
+  authorId String
+
+  data         String
+  nonce        String
+  encryptedKey String
+
+  author User  @relation(fields: [authorId], references: [uuid], onDelete: Cascade)
+  diary  Diary @relation(fields: [diaryId], references: [uuid], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
