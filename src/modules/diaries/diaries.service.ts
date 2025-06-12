@@ -19,7 +19,7 @@ export class DiariesService {
 	}
 
 	async deleteDiary(uuid: string, userUUID: string) {
-		if (await this.isDiaryOwner(uuid, userUUID)) {
+		if (await this.isDiaryOwner(userUUID, uuid)) {
 			return this.diariesRepository.deleteDiary(uuid);
 		}
 		throw new HttpException('You are not the owner of this diary', 403);
