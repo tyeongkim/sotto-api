@@ -104,12 +104,8 @@ export class DiariesRepository {
 	getSharedDiary(userUUID: string, diaryUUID: string) {
 		return this.prisma.sharedDiary.findFirst({
 			where: {
-				diary: {
-					uuid: diaryUUID,
-				},
-				recipient: {
-					uuid: userUUID,
-				},
+				diaryId: diaryUUID,
+				recipientId: userUUID,
 			},
 			include: {
 				diary: {

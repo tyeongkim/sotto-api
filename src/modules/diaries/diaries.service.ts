@@ -47,8 +47,8 @@ export class DiariesService {
 
 	async isUserInSharedDiary(userUUID: string, diaryUUID: string) {
 		const sharedDiary = await this.diariesRepository.getSharedDiary(
-			diaryUUID,
 			userUUID,
+			diaryUUID,
 		);
 		return !!sharedDiary;
 	}
