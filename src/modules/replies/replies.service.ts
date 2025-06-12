@@ -36,9 +36,21 @@ export class RepliesService {
 	}
 
 	async deleteReply(userId: string, replyId: string) {
+		const reply = await this.repliesRepository.getReply(replyId);
+		if (!reply) {
+			throw new HttpException('Reply not found', 404);
+		}
+
 		const isAuthor = await this.isReplyAuthor(userId, replyId);
-		if (!isAuthor) {
-			throw new HttpException('You are not the author of this reply', 403);
+		const isDiaryOwner = await this.diariesService.isDiaryOwner(
+			userId,
+			reply.diaryId,
+		);
+		if (!isAuthor && !isDiaryOwner) {
+			throw new HttpException(
+				'You do not have permission to delete this reply',
+				403,
+			);
 		}
 		return this.repliesRepository.deleteReply(replyId);
 	}
