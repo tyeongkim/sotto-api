@@ -1,3 +1,4 @@
+import { AttachmentsModule } from '@/modules/attachments/attachments.module';
 import { DiariesModule } from '@/modules/diaries/diaries.module';
 import { RepliesModule } from '@/modules/replies/replies.module';
 import { UsersModule } from '@/modules/users/users.module';
@@ -13,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 		UsersModule,
 		DiariesModule,
 		RepliesModule,
+		AttachmentsModule,
 	],
 	controllers: [],
 	providers: [],
