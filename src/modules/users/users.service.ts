@@ -36,7 +36,7 @@ export class UsersService {
 		if (!account) {
 			throw new HttpException('Account not found', 404);
 		}
-		if (account.accessToken || account.accessToken !== TOKEN_NOT_GENERATED) {
+		if (account.accessToken && account.accessToken !== TOKEN_NOT_GENERATED) {
 			throw new HttpException('Maximum token limit reached', 400);
 		}
 

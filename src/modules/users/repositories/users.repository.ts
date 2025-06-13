@@ -14,7 +14,7 @@ export class UsersRepository {
 	}
 
 	async getUserByToken(token: string) {
-		return this.prisma.user.findUnique({
+		return this.prisma.user.findFirst({
 			where: { accessToken: token },
 		});
 	}

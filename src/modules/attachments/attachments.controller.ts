@@ -16,7 +16,20 @@ export class AttachmentsController {
 		description:
 			'The name of the file to upload. If not provided, a random UUID will be used.',
 	})
-	getPresignedUrl(@Query('fileName') fileName: string) {
-		return this.minioService.getPresignedUrl(fileName);
+	async getPresignedUrl(
+		@Query('fileName') fileName: string = crypto.randomUUID(),
+	) {
+		return {
+			url: await this.minioService.getUploadPresignedUrl(fileName),
+			fileName: fileName,
+		};
+	}
+
+	@Get('object-url')
+	getObjectUrl(@Query('fileName') fileName: string) {
+		if (!fileName) {
+			throw new Error('File name is required to get the object URL.');
+		}
+		return this.minioService.getObjectUrl(fileName);
 	}
 }

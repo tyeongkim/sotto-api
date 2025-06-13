@@ -14,7 +14,7 @@ model User {
   name        String?
   profileUrl  String?
   publicKey   String   @unique
-  accessToken String   @unique
+  accessToken String
   bannedUsers String[] @default([])
 
   ownedDiaries  Diary[]

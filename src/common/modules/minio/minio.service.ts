@@ -32,7 +32,11 @@ export class MinioService implements OnModuleInit {
 		return this.client;
 	}
 
-	async getPresignedUrl(fileName: string = crypto.randomUUID()) {
+	async getUploadPresignedUrl(fileName: string) {
 		return this.client.presignedPutObject(this.bucketName, fileName, 60 * 60);
+	}
+
+	async getObjectUrl(fileName: string) {
+		return this.client.presignedGetObject(this.bucketName, fileName);
 	}
 }
