@@ -9,9 +9,21 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import initSwagger from './config/swagger';
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule, { cors: true });
+	const configService = await NestFactory.create(AppModule).then((app) =>
+		app.get(ConfigService),
+	);
+	const isProduction = configService.get('NODE_ENV') === 'production';
 
-	const configService = app.get(ConfigService);
+	const corsOptions = isProduction
+		? {
+				origin: ['https://sotto.tyeongk.im', 'https://sotto-viewer.tyeongk.im'],
+				credentials: true,
+				methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+				allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+			}
+		: true;
+
+	const app = await NestFactory.create(AppModule, { cors: corsOptions });
 	const logger = new Logger('bootstrap');
 
 	app.use(json({ limit: '10mb' }));
@@ -35,6 +47,9 @@ async function bootstrap() {
 		`Application version ${packageJson.version} is running on: ${await app.getUrl()}`,
 	);
 	logger.debug(`Environment: ${configService.get('NODE_ENV')}`);
+	logger.debug(
+		`CORS enabled for: ${isProduction ? 'production domains only' : 'all origins'}`,
+	);
 }
 
 bootstrap();
