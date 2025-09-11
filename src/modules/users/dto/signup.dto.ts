@@ -4,12 +4,12 @@ import { IsOptional, IsString, Length, Matches } from 'class-validator';
 export class SignupDto {
 	@IsString()
 	@Length(1, 50, { message: 'name must be between 1 and 50 characters long' })
-	@Matches(/^[a-zA-Z\s]+$/, {
-		message: 'name can only contain letters and spaces',
+	@Matches(/^[a-zA-Z가-힣\s]+$/, {
+		message: 'name can only contain Korean, English letters, and spaces',
 	})
 	@ApiProperty({
 		description: 'Name of the user',
-		example: 'John Doe',
+		example: '홍길동',
 	})
 	name: string;
 
