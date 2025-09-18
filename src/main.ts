@@ -7,6 +7,7 @@ import { AppModule } from './app/app.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import initSwagger from './config/swagger';
+import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
 
 async function bootstrap() {
 	const configService = await NestFactory.create(AppModule).then((app) =>
@@ -30,6 +31,8 @@ async function bootstrap() {
 
 	const app = await NestFactory.create(AppModule, { cors: corsOptions });
 	const logger = new Logger('bootstrap');
+
+	app.use(new RequestLoggerMiddleware().use);
 
 	app.use(json({ limit: '10mb' }));
 	app.use(urlencoded({ limit: '10mb', extended: true }));
